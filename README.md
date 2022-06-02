@@ -11,12 +11,10 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
 
 ## Features
 
-You can get the Distance from one point to another(By-Road), Just by using this package.
+You can get the Distance from one point to another(By-Road) in Gmaps, Just by using this package.
 ## Getting started
 
 First you need to have a Gmap-Flatform api.
@@ -32,3 +30,4 @@ const like = 'sample';
 ## Additional information
 
 Really need contibutors to make this more good and usefull,
+Hope this helps.
