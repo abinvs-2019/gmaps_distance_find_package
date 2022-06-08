@@ -14,10 +14,10 @@ and the Flutter guide for
 
 ## Features
 
-A Flutter Package to calculate the distance(By-Road) from gmaps.
+A Flutter Package to calculate the distance(By-Road) from gmaps of two points.
 ## Getting started
 
-All you need to do is Get and Gmaps Platform API which is Required.
+All you need to do is get a Gmaps Platform API which is Required.
 
 ## Usage
 
