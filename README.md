@@ -14,18 +14,27 @@ and the Flutter guide for
 
 ## Features
 
-You can get the Distance from one point to another(By-Road) in Gmaps, Just by using this package.
+A Flutter Package to calculate the distance(By-Road) from gmaps.
 ## Getting started
 
-First you need to have a Gmap-Flatform api.
+All you need to do is Get and Gmaps Platform API which is Required.
 
 ## Usage
 
 
 
-<!-- ```dart
-const like = 'sample';
-``` -->
+```dart
+GetDistanceWithPolyLines polylines = GetDistanceWithPolyLines();
+
+
+var distance = await polylines.createPolylines('YOUR API KEY',
+       startLatitude,
+       startLongitude,
+       destinationLatitude,
+       destinationLongitude);
+
+```
+
 
 ## Additional information
 
