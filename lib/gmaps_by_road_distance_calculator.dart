@@ -14,7 +14,7 @@ class GetDistanceWithPolyLines {
 
 // Create the polylines for showing the route between two places
 
-  createPolylines(gmapsApiKey,
+  Future<String> createPolylines(gmapsApiKey,
       {required double startLatitude,
       required double startLongitude,
       required double destinationLatitude,
@@ -35,7 +35,7 @@ class GetDistanceWithPolyLines {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
-    loopIt();
+    return loopIt();
   }
 
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -62,6 +62,6 @@ class GetDistanceWithPolyLines {
         polylineCoordinates[i + 1].longitude,
       );
     }
-    _placeDistance = totalDistance.toStringAsFixed(2);
+    return _placeDistance = totalDistance.toStringAsFixed(2);
   }
 }
