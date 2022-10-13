@@ -32,9 +32,9 @@ class DistanceCalulator {
     );
     // Adding the coordinates to the list
     if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
+      for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+      }
     }
     return loopIt();
   }
@@ -53,7 +53,6 @@ class DistanceCalulator {
 // Calculating the total distance by adding the distance
 // between small segments
 
-  var _placeDistance;
   loopIt() {
     for (int i = 0; i < polylineCoordinates.length - 1; i++) {
       totalDistance += _coordinateDistance(
@@ -63,6 +62,6 @@ class DistanceCalulator {
         polylineCoordinates[i + 1].longitude,
       );
     }
-    return _placeDistance = totalDistance.toStringAsFixed(2);
+    return totalDistance.toStringAsFixed(2);
   }
 }
