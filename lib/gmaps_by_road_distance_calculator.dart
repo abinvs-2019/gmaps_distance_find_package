@@ -1,7 +1,8 @@
 library gmaps_by_road_distance_calculator;
 
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:gmaps_by_road_distance_calculator/src/gmaps_by_road_distance.dart';
+
+import 'src/enums.dart';
 
 class DistanceCalulator with DistanceMethods {
   @override
@@ -10,12 +11,13 @@ class DistanceCalulator with DistanceMethods {
       required double startLongitude,
       required double destinationLatitude,
       required double destinationLongitude,
-      required TravelMode travelMode}) async {
+      required TravelModes travelMode}) async {
     return await super.getDistance(gmapsApiKey,
         startLatitude: startLatitude,
         startLongitude: startLongitude,
         destinationLatitude: destinationLatitude,
         destinationLongitude: destinationLatitude,
-        travelMode: travelMode);
+        travelMode: TravelModes.driving);
   }
 }
+
