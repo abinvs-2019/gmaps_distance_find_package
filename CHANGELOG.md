@@ -1,3 +1,6 @@
-## 0.0.1
+## 2.0.2
 
-* TODO: Describe initial release.
+* Breaking Changes in workflow.
+  Changes in class naming and metod naming.
+  Added option to choose travel mode
+

@@ -1,6 +1,6 @@
 name: gmaps_by_road_distance_calculator
 description: This is a Package to calculate the by-road distance from one point to another in Gmap.
-version: 2.0.1
+version: 2.0.2
 homepage: "https://github.com/abinvs-2019/gmaps_distance_find_package"
 
 environment:
@@ -16,7 +16,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

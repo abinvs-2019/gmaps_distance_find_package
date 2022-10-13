@@ -18,23 +18,24 @@ A Flutter Package to calculate the distance(By-Road) from gmaps of two points.
 ## Getting started
 
 All you need to do is get a Gmaps Platform API which is Required.
+You can choose your travel type in your requirement.
 
 ## Usage
 
 
 
 ```dart
-GetDistanceWithPolyLines polylines = GetDistanceWithPolyLines();
+DistanceCalulator distance = DistanceCalulator();
 
 
-var distance = await polylines.createPolylines('YOUR API KEY',
+var distance = await distance.getDistance('YOUR API KEY',
        startLatitude,
        startLongitude,
        destinationLatitude,
-       destinationLongitude);
+       destinationLongitude,
+       travelMode: TravelMode.bicycling);
 
 ```
-
 
 ## Additional information
 

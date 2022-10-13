@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class GetDistanceWithPolyLines {
+class DistanceCalulator {
   // Object for PolylinePoints
   late PolylinePoints polylinePoints;
 
@@ -14,11 +14,12 @@ class GetDistanceWithPolyLines {
 
 // Create the polylines for showing the route between two places
 
-  Future<String> createPolylines(gmapsApiKey,
+  Future<String> getDistance(String gmapsApiKey,
       {required double startLatitude,
       required double startLongitude,
       required double destinationLatitude,
-      required double destinationLongitude}) async {
+      required double destinationLongitude,
+      required TravelMode travelMode}) async {
     // Initializing PolylinePoints
     polylinePoints = PolylinePoints();
     // Generating the list of coordinates to be used for
@@ -27,7 +28,7 @@ class GetDistanceWithPolyLines {
       '$gmapsApiKey', // Google Maps API Key
       PointLatLng(startLatitude, startLongitude),
       PointLatLng(destinationLatitude, destinationLongitude),
-      travelMode: TravelMode.transit,
+      travelMode: travelMode,
     );
     // Adding the coordinates to the list
     if (result.points.isNotEmpty) {
