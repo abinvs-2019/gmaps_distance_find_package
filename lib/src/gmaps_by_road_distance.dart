@@ -7,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 mixin DistanceMethods {
   List<Gmap.LatLng> polylineCoordinates = [];
   // List of coordinates to join
-  
+
   Distance distance = Distance();
 
   late poly.PolylinePoints polylinePoints;
@@ -56,6 +56,17 @@ mixin DistanceMethods {
 // between small segments
   loopIt() async {
     for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+
+      //This method calculates and returns the kms from one polyline coordite to anothe coordinate
+      //[
+      //LatLong(lat,tong), // [i => 0]
+      //LatLong(lat,tong), // [i => i+1]
+      //LatLong(lat,tong),
+      //LatLong(lat,tong),
+      //LatLong(lat,tong),
+      //]
+
+
       totalDistance += await getDistanceFromPointsToPoints(
           LatLng(polylineCoordinates[i].latitude,
               polylineCoordinates[i].longitude),
