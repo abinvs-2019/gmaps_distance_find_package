@@ -1,7 +1,7 @@
 import 'package:gmaps_by_road_distance_calculator/gmaps_by_road_distance_calculator.dart';
 
 class ClaculateDistance {
-  DistanceCalculator distanceCalulator = DistanceCalculator();
+  ByRoadDistanceCalculator distanceCalulator = ByRoadDistanceCalculator();
 
   getDistance() async {
     var distanceInKm = await distanceCalulator.getDistance('API_KEY',

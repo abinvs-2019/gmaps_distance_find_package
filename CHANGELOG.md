@@ -1,7 +1,17 @@
 
 ## 2.0.4
 
+* Error fix in importing 
+
+
+## 2.0.4
+
 * More accurate distance. 
+
+## 2.0.3
+
+* Changes in code.
+  Code cleanup
 
 ## 2.0.2
 

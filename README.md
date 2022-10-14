@@ -25,7 +25,7 @@ You can choose your travel type in your requirement.
 
 
 ```dart
-DistanceCalulator distance = DistanceCalulator();
+ByRoadDistanceCalculator distance = ByRoadDistanceCalculator();
 
 
 var distance = await distance.getDistance('YOUR API KEY',
@@ -33,7 +33,7 @@ var distance = await distance.getDistance('YOUR API KEY',
        startLongitude,
        destinationLatitude,
        destinationLongitude,
-       travelMode: TravelMode.bicycling);
+       travelMode: TravelModes.bicycling);
 
 ```
 
