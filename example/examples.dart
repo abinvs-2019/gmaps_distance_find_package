@@ -1,4 +1,4 @@
-import 'package:gmaps_by_road_distance_calculator/gmps_calculator.dart';
+import 'package:gmaps_by_road_distance_calculator/gmaps_by_road_distance_calculator.dart';
 
 class ClaculateDistance {
   DistanceCalculator distanceCalulator = DistanceCalculator();
