@@ -1,5 +1,6 @@
 # This is a generated file; do not edit or check into version control.
-flutter_plugin_android_lifecycle=C:\\Users\\user\\Desktop\\Softwares\\Src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\flutter_plugin_android_lifecycle-2.0.7\\
-google_maps_flutter=C:\\Users\\user\\Desktop\\Softwares\\Src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_maps_flutter-2.2.1\\
-google_maps_flutter_android=C:\\Users\\user\\Desktop\\Softwares\\Src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_maps_flutter_android-2.3.2\\
-google_maps_flutter_ios=C:\\Users\\user\\Desktop\\Softwares\\Src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\google_maps_flutter_ios-2.1.12\\
+flutter_plugin_android_lifecycle=/Users/pp/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.17/
+google_maps_flutter=/Users/pp/.pub-cache/hosted/pub.dev/google_maps_flutter-2.5.0/
+google_maps_flutter_android=/Users/pp/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.5.3/
+google_maps_flutter_ios=/Users/pp/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.3.2/
+google_maps_flutter_web=/Users/pp/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.4+2/
