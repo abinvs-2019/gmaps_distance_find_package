@@ -19,26 +19,26 @@ class ByRoadDistanceCalculator {
 
   Future<String> getDistance(String gmapsApiKey,
       {required double startLatitude,
-        required double startLongitude,
-        required double destinationLatitude,
-        required double destinationLongitude,
-        required TravelModes travelMode}) async {
+      required double startLongitude,
+      required double destinationLatitude,
+      required double destinationLongitude,
+      required TravelModes travelMode}) async {
     // Initializing PolylinePoints
     polylinePoints = poly.PolylinePoints();
     // Generating the list of coordinates to be used for
     // drawing the polylines
-    poly.PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey: '$gmapsApiKey', // Google Maps API Key
-        request: poly.PolylineRequest(
-            origin: poly.PointLatLng(startLatitude, startLongitude),
-            destination: poly.PointLatLng(destinationLatitude, destinationLongitude),
-            mode: travelMode == TravelModes.bicycling
+    poly.PolylineResult result =
+        await polylinePoints.getRouteBetweenCoordinates(
+            '$gmapsApiKey', // Google Maps API Key
+            poly.PointLatLng(startLatitude, startLongitude),
+            poly.PointLatLng(destinationLatitude, destinationLongitude),
+            travelMode: travelMode == TravelModes.bicycling
                 ? poly.TravelMode.bicycling
                 : travelMode == TravelModes.driving
-                ? poly.TravelMode.driving
-                : travelMode == TravelModes.walking
-                ? poly.TravelMode.walking
-                : poly.TravelMode.transit));
+                    ? poly.TravelMode.driving
+                    : travelMode == TravelModes.walking
+                        ? poly.TravelMode.walking
+                        : poly.TravelMode.transit);
     // Adding the coordinates to the list
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
@@ -56,10 +56,14 @@ class ByRoadDistanceCalculator {
 // between small segments
   loopIt() {
     for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += distance(LatLng(polylineCoordinates[i].latitude, polylineCoordinates[i].longitude),
-          LatLng(polylineCoordinates[i + 1].latitude, polylineCoordinates[i + 1].longitude));
+      totalDistance += distance(
+          LatLng(polylineCoordinates[i].latitude,
+              polylineCoordinates[i].longitude),
+          LatLng(polylineCoordinates[i + 1].latitude,
+              polylineCoordinates[i + 1].longitude));
     }
     totalDistance = totalDistance / 1000; // to km
-    return totalDistance.toStringAsFixed(2); // Would return 0.0 km on any exception
+    return totalDistance
+        .toStringAsFixed(2); // Would return 0.0 km on any exception
   }
 }
