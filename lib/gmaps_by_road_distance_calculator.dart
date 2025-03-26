@@ -1,67 +1,58 @@
 library gmaps_by_road_distance_calculator;
 
-import 'package:flutter_polyline_points/flutter_polyline_points.dart' as poly;
-import 'package:google_maps_flutter/google_maps_flutter.dart' as Gmap;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 
-enum TravelModes { driving, bicycling, trnasit, walking }
+enum TravelModes { driving, bicycling, walking }
 
 class ByRoadDistanceCalculator {
-  List<Gmap.LatLng> polylineCoordinates = [];
+  Future<double> getDistance({
+    required double startLatitude,
+    required double startLongitude,
+    required double destinationLatitude,
+    required double destinationLongitude,
+    required TravelModes travelMode,
+  }) async {
+    try {
+      // Convert travel mode to OSRM-compatible profile
+      final profile = _convertTravelModeToProfile(travelMode);
+      
+      // Construct OSRM API URL
+      final url = Uri.parse(
+        'https://router.project-osrm.org/route/v1/$profile/'
+        '$startLongitude,$startLatitude;'
+        '$destinationLongitude,$destinationLatitude?overview=false'
+      );
 
-  // List of coordinates to join
-
-  Distance distance = Distance();
-
-  late poly.PolylinePoints polylinePoints;
-
-  // Create the polylines for showing the route between two places
-
-  Future<String> getDistance(String gmapsApiKey,
-      {required double startLatitude,
-      required double startLongitude,
-      required double destinationLatitude,
-      required double destinationLongitude,
-      required TravelModes travelMode}) async {
-    // Initializing PolylinePoints
-    polylinePoints = poly.PolylinePoints();
-    // Generating the list of coordinates to be used for
-    // drawing the polylines
-    poly.PolylineResult result =
-        await polylinePoints.getRouteBetweenCoordinates(
-            '$gmapsApiKey', // Google Maps API Key
-            poly.PointLatLng(startLatitude, startLongitude),
-            poly.PointLatLng(destinationLatitude, destinationLongitude),
-            travelMode: travelMode == TravelModes.bicycling
-                ? poly.TravelMode.bicycling
-                : travelMode == TravelModes.driving
-                    ? poly.TravelMode.driving
-                    : travelMode == TravelModes.walking
-                        ? poly.TravelMode.walking
-                        : poly.TravelMode.transit);
-    // Adding the coordinates to the list
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(Gmap.LatLng(point.latitude, point.longitude));
+      // Make API request
+      final response = await http.get(url);
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final distanceInMeters = data['routes'][0]['distance'].toDouble();
+        return distanceInMeters / 1000; // Convert to kilometers
+      } else {
+        throw Exception('Failed to get route: ${response.statusCode}');
       }
-    } else {
-      print('Polylines are emplty');
+    } catch (e) {
+      throw Exception('Error calculating distance: $e');
     }
-    return loopIt();
   }
 
-  double totalDistance = 0.0;
-
-// Calculating the total distance by adding the distance
-// between small segments
-  loopIt() {
-    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += distance(
-          LatLng(polylineCoordinates[i].latitude,
-              polylineCoordinates[i].longitude),
-          LatLng(polylineCoordinates[i + 1].latitude,
-              polylineCoordinates[i + 1].longitude));
+  String _convertTravelModeToProfile(TravelModes mode) {
+    switch (mode) {
+      case TravelModes.driving:
+        return 'car';
+      case TravelModes.bicycling:
+        return 'bike';
+      case TravelModes.walking:
+        return 'foot';
+      default:
+        return 'car';
     }
+  }
+}
     totalDistance = totalDistance / 1000; // to km
     return totalDistance
         .toStringAsFixed(2); // Would return 0.0 km on any exception
