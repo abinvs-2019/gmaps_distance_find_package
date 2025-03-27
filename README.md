@@ -110,20 +110,6 @@ void onGpsUpdate(LatLng position) {
 }
 ```
 
-## Offline Usage 📴
-Works completely offline after initial setup:
-
-```dart
-// Load cached route data
-final storedRoute = getCachedRoute(); // List<LatLng>
-final distance = calculator.calculateDistance(storedRoute);
-```
-
-Compatible with offline map providers:
-- Mapbox GL (offline)
-- Google Maps (cached regions)
-- Custom tile providers
-
 ## Contributing 🤝
 
 1. Fork the repository.
