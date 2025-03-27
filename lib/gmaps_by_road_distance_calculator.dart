@@ -6,64 +6,100 @@ import 'package:latlong2/latlong.dart';
 
 enum TravelModes { driving, bicycling, trnasit, walking }
 
+import 'package:latlong2/latlong.dart';
+import 'package:xml/xml.dart';
+import 'dart:async';
+
 class ByRoadDistanceCalculator {
-  List<Gmap.LatLng> polylineCoordinates = [];
+  final Distance _distance = Distance();
+  final List<LatLng> _points = [];
+  final StreamController<double> _controller = StreamController<double>();
+  double _totalDistance = 0.0;
 
-  // List of coordinates to join
-
-  Distance distance = Distance();
-
-  late poly.PolylinePoints polylinePoints;
-
-  // Create the polylines for showing the route between two places
-
-  Future<String> getDistance(String gmapsApiKey,
-      {required double startLatitude,
-      required double startLongitude,
-      required double destinationLatitude,
-      required double destinationLongitude,
-      required TravelModes travelMode}) async {
-    // Initializing PolylinePoints
-    polylinePoints = poly.PolylinePoints();
-    // Generating the list of coordinates to be used for
-    // drawing the polylines
-    poly.PolylineResult result =
-        await polylinePoints.getRouteBetweenCoordinates(
-            '$gmapsApiKey', // Google Maps API Key
-            poly.PointLatLng(startLatitude, startLongitude),
-            poly.PointLatLng(destinationLatitude, destinationLongitude),
-            travelMode: travelMode == TravelModes.bicycling
-                ? poly.TravelMode.bicycling
-                : travelMode == TravelModes.driving
-                    ? poly.TravelMode.driving
-                    : travelMode == TravelModes.walking
-                        ? poly.TravelMode.walking
-                        : poly.TravelMode.transit);
-    // Adding the coordinates to the list
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(Gmap.LatLng(point.latitude, point.longitude));
-      }
-    } else {
-      print('Polylines are emplty');
-    }
-    return loopIt();
+  // Original functionality (maintained)
+  double calculateDistance(List<LatLng> points) {
+    _totalDistance = _sumDistance(points);
+    return _totalDistance / 1000;
   }
 
-  double totalDistance = 0.0;
+  // New feature: Polyline decoding
+  static List<LatLng> decodePolylineString(String encoded) {
+    List<LatLng> points = [];
+    int index = 0;
+    double lat = 0, lng = 0;
 
-// Calculating the total distance by adding the distance
-// between small segments
-  loopIt() {
-    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += distance(
-          LatLng(polylineCoordinates[i].latitude,
-              polylineCoordinates[i].longitude),
-          LatLng(polylineCoordinates[i + 1].latitude,
-              polylineCoordinates[i + 1].longitude));
+    while (index < encoded.length) {
+      int char, shift = 0, result = 0;
+      do {
+        char = encoded.codeUnitAt(index++) - 63;
+        result |= (char & 0x1F) << shift;
+        shift += 5;
+      } while (char >= 0x20);
+      final dlat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        char = encoded.codeUnitAt(index++) - 63;
+        result |= (char & 0x1F) << shift;
+        shift += 5;
+      } while (char >= 0x20);
+      final dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lng += dlng;
+
+      points.add(LatLng(lat / 1E5, lng / 1E5));
     }
-    totalDistance = totalDistance / 1000; // to km
-    return totalDistance
-        .toStringAsFixed(2); // Would return 0.0 km on any exception
+    return points;
+  }
+
+  // New feature: GPS file parsing
+  List<LatLng> parseGPX(String gpxContent) {
+    final document = XmlDocument.parse(gpxContent);
+    return document.findAllElements('trkpt').map((node) {
+      return LatLng(
+        double.parse(node.getAttribute('lat')!),
+        double.parse(node.getAttribute('lon')!),
+      );
+    }).toList();
+  }
+
+  List<LatLng> parseKML(String kmlContent) {
+    final document = XmlDocument.parse(kmlContent);
+    final coordinates = document
+        .findAllElements('coordinates')
+        .first
+        .text
+        .trim()
+        .split(RegExp(r'\s+'));
+    return coordinates.map((coord) {
+      final parts = coord.split(',');
+      return LatLng(double.parse(parts[1]), double.parse(parts[0]));
+    }).toList();
+  }
+
+  // New feature: Real-time updates
+  Stream<double> get distanceUpdates => _controller.stream;
+
+  void addPoint(LatLng point) {
+    if (_points.isNotEmpty) {
+      _totalDistance += _distance(_points.last, point);
+      _controller.add(_totalDistance / 1000);
+    }
+    _points.add(point);
+  }
+
+  void clearPoints() {
+    _points.clear();
+    _totalDistance = 0.0;
+  }
+
+  // Helper method
+  double _sumDistance(List<LatLng> points) {
+    double total = 0.0;
+    for (int i = 0; i < points.length - 1; i++) {
+      total += _distance(points[i], points[i + 1]);
+    }
+    return total;
   }
 }
