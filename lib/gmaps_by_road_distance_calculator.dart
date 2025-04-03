@@ -3,10 +3,11 @@ library gmaps_by_road_distance_calculator;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart' as poly;
 import 'package:google_maps_flutter/google_maps_flutter.dart' as Gmap;
 import 'package:latlong2/latlong.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:xml/xml.dart';
 import 'dart:async';
+import 'dart:convert';
 
 
 
@@ -23,6 +24,52 @@ class ByRoadDistanceCalculator {
   double calculateDistance(List<LatLng> points) {
     _totalDistance = _sumDistance(points);
     return _totalDistance / 1000;
+  }
+
+    Future<double> getDistance({
+    required double startLatitude,
+    required double startLongitude,
+    required double destinationLatitude,
+    required double destinationLongitude,
+    required TravelModes travelMode,
+  }) async {
+    try {
+      // Convert travel mode to OSRM-compatible profile
+      final profile = _convertTravelModeToProfile(travelMode);
+      
+      // Construct OSRM API URL
+      final url = Uri.parse(
+        'https://router.project-osrm.org/route/v1/$profile/'
+        '$startLongitude,$startLatitude;'
+        '$destinationLongitude,$destinationLatitude?overview=false'
+      );
+
+      // Make API request
+      final response = await http.get(url);
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final distanceInMeters = data['routes'][0]['distance'].toDouble();
+        return distanceInMeters / 1000; // Convert to kilometers
+      } else {
+        throw Exception('Failed to get route: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error calculating distance: $e');
+    }
+  }
+
+  String _convertTravelModeToProfile(TravelModes mode) {
+    switch (mode) {
+      case TravelModes.driving:
+        return 'car';
+      case TravelModes.bicycling:
+        return 'bike';
+      case TravelModes.walking:
+        return 'foot';
+      default:
+        return 'car';
+    }
   }
 
   // New feature: Polyline decoding
