@@ -1,10 +1,7 @@
 library gmaps_by_road_distance_calculator;
 
-import 'package:flutter_polyline_points/flutter_polyline_points.dart' as poly;
-import 'package:google_maps_flutter/google_maps_flutter.dart' as Gmap;
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
 import 'package:xml/xml.dart';
 import 'dart:async';
 import 'dart:convert';
