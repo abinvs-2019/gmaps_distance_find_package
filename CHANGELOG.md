@@ -1,3 +1,8 @@
+## 2.1.1
+Added New features
+Fixed bugs
+Added Readme updates
+
 ## 2.1.0
 Added New features
 Fixed bugs
