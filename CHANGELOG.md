@@ -1,8 +1,11 @@
+
+## 3.0.1
+Minor updates
+
 ## 3.0.0
 Breaking changes
 Added more caluclations
 Removed depencies from gmaps
-
 
 
 ## 2.1.1
