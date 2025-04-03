@@ -1,6 +1,6 @@
 name: gmaps_by_road_distance_calculator
 description: This is a Package to calculate the by-road distance from one point to another in Gmap.
-version: 2.0.6
+version: 2.0.7
 homepage: "https://github.com/abinvs-2019/gmaps_distance_find_package"
 
 environment:
