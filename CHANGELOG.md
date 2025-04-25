@@ -1,6 +1,25 @@
 ## 2.0.7
 Minor changes
 
+## 3.0.1
+Minor updates
+
+## 3.0.0
+Breaking changes
+Added more caluclations
+Removed depencies from gmaps
+
+
+## 2.1.1
+Added New features
+Fixed bugs
+Added Readme updates
+
+## 2.1.0
+Added New features
+Fixed bugs
+Added Readme updates
+
 ## 2.0.4
 
 * Error fix in importing 
