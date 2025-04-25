@@ -1,124 +1,200 @@
-# Quick Start 🚀
+# gmaps_by_road_distance_calculator
 
-## Basic Usage
+A Dart package for calculating distances along roads and routes using multiple APIs and formats.
+
+## Features
+
+- Calculate distances between geographical points
+- Support for real-time distance tracking
+- Calculate distances along roads using OSRM (Open Source Routing Machine)
+- Multiple travel modes: driving, bicycling, walking, transit
+- Parse and work with GPX and KML route files
+- Decode polyline strings to geographical points
+
+## Getting Started
+
+### Installation
+
+Add the package to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  gmaps_by_road_distance_calculator: ^1.0.0
+```
+
+Then run:
+
+```
+flutter pub get
+```
+
+### Import
 
 ```dart
-import 'package:road_distance_calculator/road_distance_calculator.dart';
+import 'package:gmaps_by_road_distance_calculator/gmaps_by_road_distance_calculator.dart';
+```
 
+## Usage
+
+### Basic Distance Calculation
+
+Calculate straight-line distances between geographical points:
+
+```dart
 final calculator = ByRoadDistanceCalculator();
 final points = [
-  LatLng(37.7749, -122.4194),  // SF
-  LatLng(34.0522, -118.2437)   // LA
+  LatLng(37.7749, -122.4194), // San Francisco
+  LatLng(34.0522, -118.2437), // Los Angeles
 ];
 
+// Calculate straight-line distance in kilometers
 final distance = calculator.calculateDistance(points);
-print('Distance: \${distance.toStringAsFixed(2)} km');  // Output: Distance: 559.23 km
+print('Distance: $distance km');
 ```
 
-## API Reference 📚
+### Calculate Road Distance Using OSRM
 
-### Core Methods
-
-#### `calculateDistance(List<LatLng> points) → double`
-Calculates total distance for a list of coordinates.
-
-**Parameters:**
-- `points`: Ordered list of `LatLng` coordinates.
-
-**Returns:**
-- Total distance in kilometers.
-
-### Polyline Decoding
-
-#### `static decodePolylineString(String encoded) → List<LatLng>`
-Decodes polyline strings (e.g., `"yxocFxfgy@..."`) into coordinates.
+Calculate actual road distance between two points using the OSRM service:
 
 ```dart
-final polyline = 'yxocFxfgy@...';
-final points = ByRoadDistanceCalculator.decodePolylineString(polyline);
-```
+final calculator = ByRoadDistanceCalculator();
+final start = LatLng(37.7749, -122.4194); // San Francisco
+final end = LatLng(34.0522, -118.2437); // Los Angeles
 
-### GPS File Parsing
-
-#### `parseGPX(String gpxContent) → List<LatLng>`
-Extracts coordinates from GPX files.
-
-```dart
-final gpxFile = File('route.gpx').readAsStringSync();
-final points = calculator.parseGPX(gpxFile);
-```
-
-#### `parseKML(String kmlContent) → List<LatLng>`
-Extracts coordinates from KML files.
-
-```dart
-final kmlFile = File('route.kml').readAsStringSync();
-final points = calculator.parseKML(kmlFile);
-```
-
-### Real-Time Tracking
-
-#### `addPoint(LatLng point)`
-Adds points incrementally for live tracking.
-
-#### `distanceUpdates → Stream<double>`
-Stream of cumulative distance updates.
-
-```dart
-calculator.distanceUpdates.listen((km) {
-  print('Distance updated: \${km.toStringAsFixed(2)} km');
+// Calculate driving distance
+calculator.calculateDistanceViaOSRM(
+  start: start,
+  end: end,
+  mode: TravelModes.driving,
+).then((result) {
+  print('Driving distance: ${result.distance} km');
+  print('Route consists of ${result.points.length} points');
 });
 
-// Simulate GPS updates
-await Future.delayed(Duration(seconds: 1));
-calculator.addPoint(LatLng(37.3354, -122.0097));
+// Calculate walking distance
+calculator.calculateDistanceViaOSRM(
+  start: start,
+  end: end,
+  mode: TravelModes.walking,
+).then((result) {
+  print('Walking distance: ${result.distance} km');
+});
 ```
 
-## Use Cases 💡
+### Real-time Distance Tracking
 
-### 1. Fitness Apps 🏃‍♂️
-Track running/cycling routes from GPX files:
+Track and update distance in real-time as new points are added:
 
 ```dart
-final gpxPoints = calculator.parseGPX(gpxData);
-final distance = calculator.calculateDistance(gpxPoints);
+final calculator = ByRoadDistanceCalculator();
+
+// Listen for distance updates
+calculator.distanceUpdates.listen((distance) {
+  print('Current distance: $distance km');
+});
+
+// Add points as they become available (e.g., from GPS)
+calculator.addPoint(LatLng(37.7749, -122.4194));
+calculator.addPoint(LatLng(37.7850, -122.4100));
+calculator.addPoint(LatLng(37.7950, -122.4000));
+
+// Reset tracking when needed
+calculator.clearPoints();
 ```
 
-### 2. Logistics Solutions 🚚
-Calculate delivery route distances:
+### Working with GPX Files
+
+Parse GPX files to extract geographical points:
 
 ```dart
-final routePoints = ByRoadDistanceCalculator.decodePolylineString(logisticsPolyline);
-print('Total route: \${calculator.calculateDistance(routePoints)} km');
+final calculator = ByRoadDistanceCalculator();
+final gpxContent = '''
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1">
+  <trk>
+    <trkseg>
+      <trkpt lat="37.7749" lon="-122.4194"></trkpt>
+      <trkpt lat="37.7850" lon="-122.4100"></trkpt>
+      <trkpt lat="37.7950" lon="-122.4000"></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
+''';
+
+final points = calculator.parseGPX(gpxContent);
+final distance = calculator.calculateDistance(points);
+print('Distance from GPX: $distance km');
 ```
 
-### 3. Travel Planning ✈️
-Estimate road trip distances:
+### Working with KML Files
+
+Parse KML files to extract geographical points:
 
 ```dart
-final tripPlan = [start, stop1, stop2, destination];
-print('Total trip: \${calculator.calculateDistance(tripPlan)} km');
+final calculator = ByRoadDistanceCalculator();
+final kmlContent = '''
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark>
+      <LineString>
+        <coordinates>
+          -122.4194,37.7749,0
+          -122.4100,37.7850,0
+          -122.4000,37.7950,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>
+''';
+
+final points = calculator.parseKML(kmlContent);
+final distance = calculator.calculateDistance(points);
+print('Distance from KML: $distance km');
 ```
 
-### 4. IoT Tracking Devices 📡
-Live tracking integration:
+### Decode Polyline Strings
+
+Convert encoded polyline strings to geographical points:
 
 ```dart
-void onGpsUpdate(LatLng position) {
-  calculator.addPoint(position);
-  // Stream updates automatically
-}
+final encodedPolyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+final points = ByRoadDistanceCalculator.decodePolylineString(encodedPolyline);
 ```
 
-## Contributing 🤝
+## Advanced Configuration
 
-1. Fork the repository.
-2. Create your feature branch.
-3. Add tests for new features.
-4. Submit a pull request.
+### Custom OSRM Server
 
-## License 📄
-MIT License - See [LICENSE](LICENSE) for details.
+You can specify a custom OSRM server URL if you're hosting your own instance:
 
-## Credits
-Geospatial calculations powered by [latlong2](https://pub.dev/packages/latlong2).
+```dart
+calculator.calculateDistanceViaOSRM(
+  start: start,
+  end: end,
+  mode: TravelModes.driving,
+  customOSRMUrl: 'https://your-custom-osrm-server.com/route/v1',
+).then((result) {
+  print('Distance: ${result.distance} km');
+});
+```
+
+## Dependencies
+
+This package depends on:
+- `latlong2`: For geographical coordinate operations
+- `http`: For API requests
+- `xml`: For parsing GPX and KML files
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Issues and Feedback
+
+Please file issues and feedback [here](https://github.com/abinvs-2019/gmaps_distance_find_package/issues).
