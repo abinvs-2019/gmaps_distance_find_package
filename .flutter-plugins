@@ -1,6 +1,6 @@
 # This is a generated file; do not edit or check into version control.
-flutter_plugin_android_lifecycle=/Users/panospavlatos/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.20/
-google_maps_flutter=/Users/panospavlatos/.pub-cache/hosted/pub.dev/google_maps_flutter-2.7.0/
-google_maps_flutter_android=/Users/panospavlatos/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.10.0/
-google_maps_flutter_ios=/Users/panospavlatos/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.8.0/
-google_maps_flutter_web=/Users/panospavlatos/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.8/
+flutter_plugin_android_lifecycle=/home/user/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.27/
+google_maps_flutter=/home/user/.pub-cache/hosted/pub.dev/google_maps_flutter-2.12.0/
+google_maps_flutter_android=/home/user/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.16.0/
+google_maps_flutter_ios=/home/user/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.15.0/
+google_maps_flutter_web=/home/user/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.12/

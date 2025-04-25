@@ -15,10 +15,15 @@ dependencies:
 
   google_maps_flutter: ^2.7.0
   latlong2: ^0.9.1
+  http: ^1.1.0
+  xml: ^6.5.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: ^1.24.4
+  mockito: ^5.4.2
+  http: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
