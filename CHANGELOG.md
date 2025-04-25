@@ -1,6 +1,3 @@
-## 2.0.7
-Minor changes
-
 ## 3.0.1
 Minor updates
 
